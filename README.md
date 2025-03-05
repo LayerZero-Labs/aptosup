@@ -34,7 +34,7 @@ source ~/.zshrc
 ### List installed aptos versions
 
 ```bash
-sudo aptosup -l
+aptosup -l
 ```
 
 ### Using Different Aptos Version
@@ -42,11 +42,11 @@ sudo aptosup -l
 Note: You might be prompter to enter your sudo password during the process - as it might need to install dependencies via your package manager.
 
 ```bash
-sudo aptosup -v <version>
+aptosup -v <version>
 ```
 
-- if you want to install version 3.5.0 for movement network - `sudo aptosup -v 3.5.0`
-- if you want to install version 6.0.1 for aptos network - `sudo aptosup -v 6.0.1`
+- if you want to install version 3.5.0 for movement network - `aptosup -v 3.5.0`
+- if you want to install version 6.0.1 for aptos network - `aptosup -v 6.0.1`
 
 The script checks if the aptos binary already exists in `/usr/local/bin/.aptos` directory. If it does, it will use the existing binary.
 

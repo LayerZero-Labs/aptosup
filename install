@@ -9,7 +9,6 @@ echo "Aptos CLI Version Manager installed successfully"
 echo "You can now use aptosup to manage your Aptos CLI versions"
 echo "Run 'aptosup -l' to list all available versions"
 echo "Run 'aptosup -v <version>' to install a specific version"
-echo "Run 'aptosup -u' to update to the latest version"
 
 echo "########################################################"
 echo "You might want to add the following to your ~/.zshrc or ~/.bashrc file for a more permanent solution:"
