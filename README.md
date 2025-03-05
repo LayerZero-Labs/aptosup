@@ -17,24 +17,29 @@ git clone https://github.com/LayerZero-Labs/aptosup.git
 Install aptosup - this can also be used to update aptosup
 
 ```bash
-chmod +x install
+sudo chmod +x install
 ```
 
 ```bash
-./install
+sudo ./install
 ```
 
 ### Addition to your .zshrc or .bashrc
 
 ```bash
 echo "export PATH=\"$HOME/.aptosup:\$PATH\"" >> ~/.zshrc
+```
+
+and then refresh your shell
+
+```bash
 source ~/.zshrc
 ```
 
 ### List installed aptos versions
 
 ```bash
-aptosup -l
+sudo aptosup -l
 ```
 
 ### Using Different Aptos Version
@@ -42,11 +47,11 @@ aptosup -l
 Note: You might be prompter to enter your sudo password during the process - as it might need to install dependencies via your package manager.
 
 ```bash
-aptosup -v <version>
+sudo aptosup -v <version>
 ```
 
-- if you want to install version 3.5.0 for movement network - `aptosup -v 3.5.0`
-- if you want to install version 6.0.1 for aptos network - `aptosup -v 6.0.1`
+- if you want to install version 3.5.0 for movement network - `sudo aptosup -v 3.5.0`
+- if you want to install version 6.0.1 for aptos network - `sudo aptosup -v 6.0.1`
 
 The script checks if the aptos binary already exists in `/usr/local/bin/.aptos` directory. If it does, it will use the existing binary.
 

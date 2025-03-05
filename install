@@ -5,6 +5,12 @@ mkdir -p $BIN_PATH/tmp
 cp aptosup $BIN_PATH
 chmod +x $BIN_PATH/aptosup
 
+# Make sure that $BIN_PATH/aptosup exists
+if [ ! -f "$BIN_PATH/aptosup" ]; then
+    echo "aptosup binary not found in $BIN_PATH"
+    exit 1
+fi
+
 echo "Aptos CLI Version Manager installed successfully"
 echo "You can now use aptosup to manage your Aptos CLI versions"
 echo "Run 'aptosup -l' to list all available versions"
