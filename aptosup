@@ -1,0 +1,120 @@
+#!/bin/bash
+BIN_PATH="/usr/local/bin/.aptos"
+
+# Check if running with sudo
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run with sudo privileges to install to $BIN_PATH"
+  exit 1
+fi
+
+mkdir -p $BIN_PATH
+cp aptosup $BIN_PATH
+chmod +x $BIN_PATH/aptosup
+
+function install_aptos() {
+    # If no aptos version is provided, use the default aptos version
+    if [ -z "$APTOS_VERSION" ]; then
+        echo "No aptos version provided, exiting"
+        exit 1
+    fi
+
+    # Print the bin path and aptos version
+    echo "Using path for binary installation: $BIN_PATH"
+    echo "Trying to set aptos version to: $APTOS_VERSION \n"
+
+    CURR_APTOS_BINARY_PATH="$BIN_PATH/aptos-$APTOS_VERSION"
+
+    # Check if the bin path exists then we set aptos to the existing binary
+    if [ -f "$CURR_APTOS_BINARY_PATH" ]; then
+        echo "Aptos binary already exists at $CURR_APTOS_BINARY_PATH"
+        echo "Using aptos version $APTOS_VERSION as aptos"
+    else
+        # If we reach this code is means that the aptos binary does not exist
+        # So we need to download the aptos binary
+        pushd /tmp
+        echo "Downloading aptos-core-aptos-cli-v${APTOS_VERSION}.tar.gz from github - this may take a while..."
+        curl -L https://github.com/aptos-labs/aptos-core/archive/refs/tags/aptos-cli-v${APTOS_VERSION}.tar.gz | tar -xz
+        mv ./aptos-core-aptos-cli-v${APTOS_VERSION} ./aptos-v${APTOS_VERSION}
+        pushd aptos-v${APTOS_VERSION}
+
+
+        RUST_TOOLCHAIN_VERSION=1.78.0
+        
+        # Handle the case where the aptos version is 3.5.0
+        if [ "$APTOS_VERSION" == "3.5.0" ]; then
+            # Fix for sed compatibility between macOS and Linux
+            if [[ "$OSTYPE" == "darwin"* ]]; then
+                sed -i '' 's/channel="1.78.0"/channel="nightly"/' rust-toolchain.toml
+            else
+                # Linux version
+                sed -i 's/channel="1.78.0"/channel="nightly"/' rust-toolchain.toml
+            fi
+        fi
+
+        # Install aptos dependencies
+        ./scripts/dev_setup.sh -b -k
+
+        # Build the aptos binary tagged with the rust toolchain version
+        cargo +${RUST_TOOLCHAIN_VERSION} build --package aptos --profile cli
+
+        sudo cp -R ./target/cli/aptos $CURR_APTOS_BINARY_PATH
+        popd
+        popd
+
+        rm -rf aptos-core
+    fi
+
+    echo "Symlinking $CURR_APTOS_BINARY_PATH to $BIN_PATH/aptos"
+    # Remove the existing symlink if it exists
+    if [ -L "$BIN_PATH/aptos" ]; then
+        rm -f "$BIN_PATH/aptos"
+    fi
+    ln -s $CURR_APTOS_BINARY_PATH $BIN_PATH/aptos
+    echo "Aptos binary updated successfully"
+    aptos --version
+
+    # If the aptos binary is not in the path, add it to the path
+    if ! command -v aptosup &> /dev/null; then
+        echo "########################################################"
+        echo "Aptos binary not found in path, you can add it to the current terminal session by running:"
+        echo "export PATH=\"$BIN_PATH:\$PATH\""
+
+        echo "You might want to add the following to your ~/.zshrc or ~/.bashrc file for a more permanent solution:"
+        echo "\nexport PATH=\"/usr/local/bin/.aptos:\$PATH\"" >> ~/.zshrc
+        echo "source ~/.zshrc"
+        echo "########################################################"
+    fi
+}
+
+function list_versions() {
+    installed_versions=$(ls $BIN_PATH | grep aptos- | sed 's/aptos-//g')
+    echo "Installed versions at $BIN_PATH:"
+    # Format each version on a new line with aptos- prefix
+    for version in $installed_versions; do
+        echo "aptos-$version"
+    done
+}
+
+# There are only 2 flags that can be used - they can be used seperately:
+# 1. set aptos version called --version or -v
+# 2. list all available aptos versions called --list or -l
+while getopts "v:l" opt; do
+  case ${opt} in
+    v )
+      APTOS_VERSION=$OPTARG
+      echo "Setting aptos version to: $APTOS_VERSION"
+      install_aptos
+      ;;
+    l )
+      list_versions
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      exit 1
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      exit 1
+      ;;
+  esac
+done
