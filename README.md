@@ -14,10 +14,21 @@ Clone the repository.
 git clone https://github.com/LayerZero-Labs/aptosup.git
 ```
 
-Make the script executable.
+Install aptosup - this can also be used to update aptosup
 
 ```bash
-chmod +x aptosup
+chmod +x install.sh
+```
+
+```bash
+sudo ./install.sh
+```
+
+### Addition to your .zshrc or .bashrc
+
+```bash
+echo "export PATH=\"$HOME/.aptosup:\$PATH\"" >> ~/.zshrc
+source ~/.zshrc
 ```
 
 ### List installed aptos versions
@@ -27,6 +38,8 @@ sudo aptosup -l
 ```
 
 ### Using Different Aptos Version
+
+Note: You might be prompter to enter your sudo password during the process - as it might need to install dependencies via your package manager.
 
 ```bash
 sudo aptosup -v <version>
@@ -39,11 +52,6 @@ The script checks if the aptos binary already exists in `/usr/local/bin/.aptos` 
 
 If the aptos binary does not exist, it will build from source and install the aptos binary to `/usr/local/bin/.aptos` directory.
 
-### Addition to your .zshrc or .bashrc
 
-```bash
-echo "\nexport PATH=\"/usr/local/bin/.aptos:\$PATH\"" >> ~/.zshrc
-source ~/.zshrc
-```
 
 for bash use `~/.bashrc` instead of `~/.zshrc`

@@ -1,0 +1,19 @@
+#!/bin/bash
+BIN_PATH="$HOME/.aptosup"
+
+mkdir -p $BIN_PATH/tmp
+cp aptosup $BIN_PATH
+chmod +x $BIN_PATH/aptosup
+
+echo "Aptos CLI Version Manager installed successfully"
+echo "You can now use aptosup to manage your Aptos CLI versions"
+echo "Run 'aptosup -l' to list all available versions"
+echo "Run 'aptosup -v <version>' to install a specific version"
+echo "Run 'aptosup -u' to update to the latest version"
+
+echo "########################################################"
+echo "You might want to add the following to your ~/.zshrc or ~/.bashrc file for a more permanent solution:"
+echo "Run the following command to add the path to your ~/.zshrc or ~/.bashrc file:"
+echo "echo 'export PATH=\"$BIN_PATH:\$PATH\"' >> ~/.zshrc"
+echo "echo 'source ~/.zshrc' >> ~/.zshrc"
+echo "########################################################"
