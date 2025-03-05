@@ -17,11 +17,11 @@ git clone https://github.com/LayerZero-Labs/aptosup.git
 Install aptosup - this can also be used to update aptosup
 
 ```bash
-chmod +x install.sh
+chmod +x install
 ```
 
 ```bash
-sudo ./install.sh
+./install
 ```
 
 ### Addition to your .zshrc or .bashrc

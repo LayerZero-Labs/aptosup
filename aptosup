@@ -72,7 +72,7 @@ function install_aptos() {
 
         echo "You might want to add the following to your ~/.zshrc or ~/.bashrc file for a more permanent solution:"
         echo "echo 'export PATH=\"$BIN_PATH:\$PATH\"' >> ~/.zshrc"
-        echo "echo 'source ~/.zshrc' >> ~/.zshrc"
+        echo "source ~/.zshrc"
         echo "########################################################"
     fi
 }
