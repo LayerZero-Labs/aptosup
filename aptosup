@@ -1,15 +1,6 @@
 #!/bin/bash
-BIN_PATH="/usr/local/bin/.aptos"
-
-# Check if running with sudo
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run with sudo privileges to install to $BIN_PATH"
-  exit 1
-fi
-
-mkdir -p $BIN_PATH
-cp aptosup $BIN_PATH
-chmod +x $BIN_PATH/aptosup
+BIN_PATH="$HOME/.aptosup"
+TMP_PATH="$BIN_PATH/tmp"
 
 function install_aptos() {
     # If no aptos version is provided, use the default aptos version
@@ -20,7 +11,7 @@ function install_aptos() {
 
     # Print the bin path and aptos version
     echo "Using path for binary installation: $BIN_PATH"
-    echo "Trying to set aptos version to: $APTOS_VERSION \n"
+    echo "Trying to set aptos version to: $APTOS_VERSION"
 
     CURR_APTOS_BINARY_PATH="$BIN_PATH/aptos-$APTOS_VERSION"
 
@@ -31,7 +22,7 @@ function install_aptos() {
     else
         # If we reach this code is means that the aptos binary does not exist
         # So we need to download the aptos binary
-        pushd /tmp
+        pushd $TMP_PATH
         echo "Downloading aptos-core-aptos-cli-v${APTOS_VERSION}.tar.gz from github - this may take a while..."
         curl -L https://github.com/aptos-labs/aptos-core/archive/refs/tags/aptos-cli-v${APTOS_VERSION}.tar.gz | tar -xz
         mv ./aptos-core-aptos-cli-v${APTOS_VERSION} ./aptos-v${APTOS_VERSION}
@@ -80,8 +71,8 @@ function install_aptos() {
         echo "export PATH=\"$BIN_PATH:\$PATH\""
 
         echo "You might want to add the following to your ~/.zshrc or ~/.bashrc file for a more permanent solution:"
-        echo "\nexport PATH=\"/usr/local/bin/.aptos:\$PATH\"" >> ~/.zshrc
-        echo "source ~/.zshrc"
+        echo "echo 'export PATH=\"$BIN_PATH:\$PATH\"' >> ~/.zshrc"
+        echo "echo 'source ~/.zshrc' >> ~/.zshrc"
         echo "########################################################"
     fi
 }
