@@ -20,6 +20,25 @@ function install_aptos() {
         echo "Aptos binary already exists at $CURR_APTOS_BINARY_PATH"
         echo "Using aptos version $APTOS_VERSION as aptos"
     else
+        echo "This will install aptos version $APTOS_VERSION"
+        echo "You might be prompter to enter your sudo password during the process (a few times) - as it might need to install dependencies via your package manager."
+        echo "If you want to skip that you can re-run this script with sudo - sudo aptosup -v <version>"
+        echo "Do you want to continue? (y/n)"
+        read -p "Enter your choice: " choice
+        case $choice in
+            y|Y)
+                echo "Continuing with installation..."
+                ;;
+            n|N)
+                echo "Exiting..."
+                exit 1
+                ;;
+            *)
+                echo "Invalid option: $choice"
+                exit 1
+                ;;
+        esac
+
         # If we reach this code is means that the aptos binary does not exist
         # So we need to download the aptos binary
         pushd $TMP_PATH
