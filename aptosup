@@ -3,23 +3,22 @@ BIN_PATH="$HOME/.aptosup"
 TMP_PATH="$BIN_PATH/tmp"
 
 function install_aptos() {
-    # If no aptos version is provided, use the default aptos version
     if [ -z "$APTOS_VERSION" ]; then
         echo "No aptos version provided, exiting"
         exit 1
     fi
 
-    # Print the bin path and aptos version
     echo "Using path for binary installation: $BIN_PATH"
     echo "Trying to set aptos version to: $APTOS_VERSION"
 
     CURR_APTOS_BINARY_PATH="$BIN_PATH/aptos-$APTOS_VERSION"
 
-    # Check if the bin path exists then we set aptos to the existing binary
+    # Check if the bin path for the specified version exists and if it does we set aptos to the existing binary
     if [ -f "$CURR_APTOS_BINARY_PATH" ]; then
         echo "Aptos binary already exists at $CURR_APTOS_BINARY_PATH"
         echo "Using aptos version $APTOS_VERSION as aptos"
     else
+        # Aptos needs to be installed from source - i hope you like waiting for a bit. 
         # Check if running with sudo
         if [ "$EUID" -ne 0 ]; then
             echo "Please run with sudo privileges to install to $BIN_PATH"
@@ -51,10 +50,10 @@ function install_aptos() {
         mv ./aptos-core-aptos-cli-v${APTOS_VERSION} ./aptos-v${APTOS_VERSION}
         pushd aptos-v${APTOS_VERSION}
 
-
         RUST_TOOLCHAIN_VERSION=1.78.0
         
         # Handle the case where the aptos version is 3.5.0
+        # This is required because aptos version 3.5.0 installs "cargo machete" which only works on nightly
         if [ "$APTOS_VERSION" == "3.5.0" ]; then
             # Fix for sed compatibility between macOS and Linux
             if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -68,7 +67,7 @@ function install_aptos() {
         # Install aptos dependencies
         ./scripts/dev_setup.sh -b -k
 
-        # Build the aptos binary tagged with the rust toolchain version
+        # Build the aptos binary tagged with the rust toolchain version - future proofing for when different versions of aptos are built with different rust toolchains
         cargo +${RUST_TOOLCHAIN_VERSION} build --package aptos --profile cli
 
         sudo cp -R ./target/cli/aptos $CURR_APTOS_BINARY_PATH
