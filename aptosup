@@ -157,7 +157,7 @@ while getopts "s:li:r:u" opt; do
       remove_aptos
       ;;
     u )
-      curl -sSL https://raw.githubusercontent.com/LayerZero-Labs/aptosup/main/install > $BIN_PATH/aptosup
+      curl -sSL https://raw.githubusercontent.com/LayerZero-Labs/aptosup/main/aptosup > $BIN_PATH/aptosup
       chmod +x $BIN_PATH/aptosup
       echo "aptosup updated successfully"
       ;;
