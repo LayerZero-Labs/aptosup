@@ -129,7 +129,7 @@ function install_aptos() {
         # Build the aptos binary tagged with the rust toolchain version - future proofing for when different versions of aptos are built with different rust toolchains
         cargo +${RUST_TOOLCHAIN_VERSION} build --package aptos --profile cli
 
-        sudo cp -R ./target/cli/aptos $CURR_APTOS_BINARY_PATH
+        cp -R ./target/cli/aptos $CURR_APTOS_BINARY_PATH
         popd
         popd
 

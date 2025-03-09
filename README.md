@@ -54,8 +54,8 @@ aptosup -i <version>
 
 This only installs the new version, you will need to set it as active version manually.
 
-- if you want to install version 3.5.0 for movement network - `sudo aptosup -i 3.5.0`
-- if you want to install version 6.0.1 for aptos network - `sudo aptosup -i 6.0.1`
+- if you want to install version 3.5.0 for movement network - `aptosup -i 3.5.0`
+- if you want to install version 6.0.1 for aptos network - `aptosup -i 6.0.1`
 
 The script checks if the aptos binary already exists in `$HOME/.aptos`. If it does, it switches the current active version to the new installed version.
 
