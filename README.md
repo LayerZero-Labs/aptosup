@@ -26,25 +26,41 @@ and then refresh your shell
 source ~/.zshrc
 ```
 
+for bash use `~/.bashrc` instead of `~/.zshrc`
+
 ### List installed aptos versions
 
 ```bash
 aptosup -l
 ```
 
-### Using Different Aptos Version
+### Installing aptos version
 
-Note: You might be prompter to enter your sudo password during the process - as it might need to install dependencies via your package manager.
+Note: You will be prompted to enter your sudo password during the process - as it might need to install dependencies via your package manager.
 
 ```bash
-aptosup -v <version>
+aptosup -i <version>
 ```
 
-- if you want to install version 3.5.0 for movement network - `sudo aptosup -v 3.5.0`
-- if you want to install version 6.0.1 for aptos network - `sudo aptosup -v 6.0.1`
+- if you want to install version 3.5.0 for movement network - `sudo aptosup -i 3.5.0`
+- if you want to install version 6.0.1 for aptos network - `sudo aptosup -i 6.0.1`
 
-The script checks if the aptos binary already exists in `/usr/local/bin/.aptos` directory. If it does, it will use the existing binary.
+The script checks if the aptos binary already exists in `$HOME/.aptos`. If it does, it switches the current active version to the new installed version.
 
-If the aptos binary does not exist, it will build from source and install the aptos binary to `/usr/local/bin/.aptos` directory.
+### Set active installed aptos version
 
-for bash use `~/.bashrc` instead of `~/.zshrc`
+```bash
+aptosup -s <version>
+```
+
+### Remove installed aptos version
+
+```bash
+aptosup -r <version>
+```
+
+### Update aptosup
+
+```bash
+aptosup -u
+```
