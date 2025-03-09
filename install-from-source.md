@@ -24,8 +24,6 @@ sudo chown -R $USER: ~/.aptosup
 
 This will change the ownership of the `~/.aptosup` directory to your user.
 
-### Clone the repository
-
 ```bash
 git clone https://github.com/LayerZero-Labs/aptosup.git
 ```

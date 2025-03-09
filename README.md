@@ -1,6 +1,6 @@
 # Aptos CLI Version Manager - aptosup
 
-This is a simple script to update and install the Aptos CLI to a specific version. It also lets you toggle between different versions 
+This is a simple script to update and install the Aptos CLI to a specific version. It also lets you toggle between different versions of the Aptos CLI.
 
 ## Usage
 
