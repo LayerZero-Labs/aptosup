@@ -38,9 +38,21 @@ aptosup -l
 
 Note: You will be prompted to enter your sudo password during the process - as it might need to install dependencies via your package manager.
 
+#### Install and set as active version
+
+This sets the default version to be installed and set as active version.
+
+```bash
+aptosup -d <version>
+```
+
+#### Only install
+
 ```bash
 aptosup -i <version>
 ```
+
+This only installs the new version, you will need to set it as active version manually.
 
 - if you want to install version 3.5.0 for movement network - `sudo aptosup -i 3.5.0`
 - if you want to install version 6.0.1 for aptos network - `sudo aptosup -i 6.0.1`

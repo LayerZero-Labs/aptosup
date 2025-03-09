@@ -152,7 +152,9 @@ function list_versions() {
 # 3. remove installed aptos version called --remove or -r
 # 4. set installed aptos version called --set-version or -s
 # 5. update aptosup called --update or -u
-while getopts "s:li:r:uh" opt; do
+# 6. default which installs and sets the version as active
+# 7. help called --help or -h
+while getopts "s:li:r:uhd:" opt; do
   case ${opt} in
     s )
       APTOS_VERSION=$OPTARG
@@ -166,6 +168,8 @@ while getopts "s:li:r:uh" opt; do
       APTOS_VERSION=$OPTARG
       echo "Installing aptos version: $APTOS_VERSION"
       install_aptos
+      echo "Aptos version $APTOS_VERSION installed successfully"
+      echo "You can now set the version as active by running: aptosup -s $APTOS_VERSION"
       ;;
     r )
       APTOS_VERSION=$OPTARG
@@ -176,6 +180,15 @@ while getopts "s:li:r:uh" opt; do
       curl -sSL https://raw.githubusercontent.com/LayerZero-Labs/aptosup/main/aptosup > $BIN_PATH/aptosup
       chmod +x $BIN_PATH/aptosup
       echo "aptosup updated successfully"
+      ;;
+    d )
+      APTOS_VERSION=$OPTARG
+      echo "Installing aptos version: $APTOS_VERSION"
+      install_aptos
+      echo "Aptos version $APTOS_VERSION installed successfully"
+      echo "Setting aptos version to: $APTOS_VERSION"
+      set_aptos_version
+      echo "Aptos version $APTOS_VERSION set as active"
       ;;
     h )
       print_usage
