@@ -2,7 +2,7 @@
 BIN_PATH="$HOME/.aptosup"
 
 mkdir -p $BIN_PATH/tmp
-cp aptosup $BIN_PATH
+curl -sSL https://raw.githubusercontent.com/LayerZero-Labs/aptosup/main/aptosup > $BIN_PATH/aptosup
 chmod +x $BIN_PATH/aptosup
 
 # Make sure that $BIN_PATH/aptosup exists
