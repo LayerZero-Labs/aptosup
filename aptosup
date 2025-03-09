@@ -133,7 +133,7 @@ function install_aptos() {
         popd
         popd
 
-        rm -rf aptos-core
+        rm -rf aptos-v${APTOS_VERSION}
     fi
 }
 
