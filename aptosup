@@ -136,7 +136,7 @@ function list_versions() {
 # 3. remove installed aptos version called --remove or -r
 # 4. set installed aptos version called --set-version or -s
 # 5. update aptosup called --update or -u
-while getopts "s:l:i:r:u:" opt; do
+while getopts "s:li:r:u" opt; do
   case ${opt} in
     s )
       APTOS_VERSION=$OPTARG
