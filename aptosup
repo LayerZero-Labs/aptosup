@@ -2,6 +2,22 @@
 BIN_PATH="$HOME/.aptosup"
 TMP_PATH="$BIN_PATH/tmp"
 
+# Print usage information
+function print_usage() {
+    echo "Usage: aptosup [OPTIONS]"
+    echo "Aptos version manager"
+    echo ""
+    echo "Options:"
+    echo "  -l, --list                List installed Aptos versions"
+    echo "  -i VERSION, --install VERSION    Install Aptos version"
+    echo "  -s VERSION, --set VERSION        Set active Aptos version"
+    echo "  -r VERSION, --remove VERSION     Remove installed Aptos version"
+    echo "  -u, --update              Update aptosup to the latest version"
+    echo "  -h, --help                Display this help message"
+    echo ""
+    echo "Example: aptosup -i 3.5.0"
+}
+
 function validate_input() {
     if [ -z "$APTOS_VERSION" ]; then
         echo "No aptos version provided, exiting"
@@ -136,7 +152,7 @@ function list_versions() {
 # 3. remove installed aptos version called --remove or -r
 # 4. set installed aptos version called --set-version or -s
 # 5. update aptosup called --update or -u
-while getopts "s:li:r:u" opt; do
+while getopts "s:li:r:uh" opt; do
   case ${opt} in
     s )
       APTOS_VERSION=$OPTARG
@@ -160,6 +176,10 @@ while getopts "s:li:r:u" opt; do
       curl -sSL https://raw.githubusercontent.com/LayerZero-Labs/aptosup/main/aptosup > $BIN_PATH/aptosup
       chmod +x $BIN_PATH/aptosup
       echo "aptosup updated successfully"
+      ;;
+    h )
+      print_usage
+      exit 0
       ;;
     \? )
       echo "Invalid option: $OPTARG" 1>&2
