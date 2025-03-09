@@ -2,6 +2,54 @@
 BIN_PATH="$HOME/.aptosup"
 TMP_PATH="$BIN_PATH/tmp"
 
+function validate_input() {
+    if [ -z "$APTOS_VERSION" ]; then
+        echo "No aptos version provided, exiting"
+        exit 1
+    fi
+
+    CURR_APTOS_BINARY_PATH="$BIN_PATH/aptos-$APTOS_VERSION"
+
+    # Check if the aptos binary exists
+    if [ ! -f "$CURR_APTOS_BINARY_PATH" ]; then
+        echo "Aptos binary not found at $CURR_APTOS_BINARY_PATH, please install the version first"
+        exit 1
+    fi    
+}
+
+function remove_aptos() {
+    validate_input
+    CURR_APTOS_BINARY_PATH="$BIN_PATH/aptos-$APTOS_VERSION"
+    rm -f "$CURR_APTOS_BINARY_PATH"
+    echo "Aptos binary removed successfully. You need to call set or install to initialize the aptos binary"
+}
+
+function set_aptos_version() {
+    validate_input
+    CURR_APTOS_BINARY_PATH="$BIN_PATH/aptos-$APTOS_VERSION"
+
+    echo "Symlinking $CURR_APTOS_BINARY_PATH to $BIN_PATH/aptos"
+    # Remove the existing symlink if it exists
+    if [ -L "$BIN_PATH/aptos" ]; then
+        rm -f "$BIN_PATH/aptos"
+    fi
+    ln -s $CURR_APTOS_BINARY_PATH $BIN_PATH/aptos
+    echo "Aptos binary updated successfully"
+    aptos --version
+
+    # If the aptos binary is not in the path, add it to the path
+    if ! command -v aptosup &> /dev/null; then
+        echo "########################################################"
+        echo "Aptos binary not found in path, you can add it to the current terminal session by running:"
+        echo "export PATH=\"$BIN_PATH:\$PATH\""
+
+        echo "You might want to add the following to your ~/.zshrc or ~/.bashrc file for a more permanent solution:"
+        echo "echo 'export PATH=\"$BIN_PATH:\$PATH\"' >> ~/.zshrc"
+        echo "source ~/.zshrc"
+        echo "########################################################"
+    fi  
+}
+
 function install_aptos() {
     if [ -z "$APTOS_VERSION" ]; then
         echo "No aptos version provided, exiting"
@@ -19,12 +67,7 @@ function install_aptos() {
         echo "Using aptos version $APTOS_VERSION as aptos"
     else
         # Aptos needs to be installed from source - i hope you like waiting for a bit. 
-        # Check if running with sudo
-        if [ "$EUID" -ne 0 ]; then
-            echo "Please run with sudo privileges to install to $BIN_PATH"
-            exit 1
-        fi
-        
+
         echo "This will install aptos version $APTOS_VERSION"
         echo "Do you want to continue? (y/n)"
         read -p "Enter your choice: " choice
@@ -76,27 +119,6 @@ function install_aptos() {
 
         rm -rf aptos-core
     fi
-
-    echo "Symlinking $CURR_APTOS_BINARY_PATH to $BIN_PATH/aptos"
-    # Remove the existing symlink if it exists
-    if [ -L "$BIN_PATH/aptos" ]; then
-        rm -f "$BIN_PATH/aptos"
-    fi
-    ln -s $CURR_APTOS_BINARY_PATH $BIN_PATH/aptos
-    echo "Aptos binary updated successfully"
-    aptos --version
-
-    # If the aptos binary is not in the path, add it to the path
-    if ! command -v aptosup &> /dev/null; then
-        echo "########################################################"
-        echo "Aptos binary not found in path, you can add it to the current terminal session by running:"
-        echo "export PATH=\"$BIN_PATH:\$PATH\""
-
-        echo "You might want to add the following to your ~/.zshrc or ~/.bashrc file for a more permanent solution:"
-        echo "echo 'export PATH=\"$BIN_PATH:\$PATH\"' >> ~/.zshrc"
-        echo "source ~/.zshrc"
-        echo "########################################################"
-    fi
 }
 
 function list_versions() {
@@ -108,18 +130,36 @@ function list_versions() {
     done
 }
 
-# There are only 2 flags that can be used - they can be used seperately:
-# 1. set aptos version called --version or -v
-# 2. list all available aptos versions called --list or -l
-while getopts "v:l" opt; do
+# There are only 5 flags that can be used - they can be used seperately:
+# 1. list all available aptos versions called --list or -l
+# 2. install new version called --install or -i
+# 3. remove installed aptos version called --remove or -r
+# 4. set installed aptos version called --set-version or -s
+# 5. update aptosup called --update or -u
+while getopts "s:l:i:r:u:" opt; do
   case ${opt} in
-    v )
+    s )
       APTOS_VERSION=$OPTARG
       echo "Setting aptos version to: $APTOS_VERSION"
-      install_aptos
+      set_aptos_version
       ;;
     l )
       list_versions
+      ;;
+    i )
+      APTOS_VERSION=$OPTARG
+      echo "Installing aptos version: $APTOS_VERSION"
+      install_aptos
+      ;;
+    r )
+      APTOS_VERSION=$OPTARG
+      echo "Removing aptos version: $APTOS_VERSION"
+      remove_aptos
+      ;;
+    u )
+      curl -sSL https://raw.githubusercontent.com/LayerZero-Labs/aptosup/main/install > $BIN_PATH/aptosup
+      chmod +x $BIN_PATH/aptosup
+      echo "aptosup updated successfully"
       ;;
     \? )
       echo "Invalid option: $OPTARG" 1>&2
