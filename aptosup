@@ -124,7 +124,7 @@ function install_aptos() {
         fi
 
         # Install aptos dependencies
-        ./scripts/dev_setup.sh -b
+        ./scripts/dev_setup.sh -b -k -t
 
         # Build the aptos binary tagged with the rust toolchain version - future proofing for when different versions of aptos are built with different rust toolchains
         cargo +${RUST_TOOLCHAIN_VERSION} build --package aptos --profile cli
