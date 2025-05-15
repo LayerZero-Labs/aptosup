@@ -123,8 +123,20 @@ function install_aptos() {
             fi
         fi
 
-        # Install aptos dependencies
-        ./scripts/dev_setup.sh -b -k -t
+        # ---- Ask the user whether to include -t -------------------------------------
+        read -rp "Install test tooling as well? (-t) [y/N]: " reply
+        case "$reply" in
+        [Yy]* ) TFLAG="-t" ;;
+        * )      TFLAG=""  ;;
+        esac
+        # -----------------------------------------------------------------------------
+
+        # Your original fixed flags
+        BASE_FLAGS="-b -k"
+
+        # Forward everything to the real setup script (or keep the
+        # rest of dev_setup.sh intact if you pasted this inside it)
+        exec ./scripts/dev_setup.sh $BASE_FLAGS $TFLAG
 
         # Build the aptos binary tagged with the rust toolchain version - future proofing for when different versions of aptos are built with different rust toolchains
         cargo +${RUST_TOOLCHAIN_VERSION} build --package aptos --profile cli
