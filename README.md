@@ -80,3 +80,15 @@ aptosup -r <version>
 ```bash
 aptosup -u
 ```
+## Troubleshooting
+
+
+### python-homebrew on macos
+```
+× This environment is externally managed
+╰─> To install Python packages system-wide, try brew install
+    xyz, where xyz is the package you are trying to
+    install.
+```
+
+Create a python environment (python doc)[https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/] and re-run from within it
