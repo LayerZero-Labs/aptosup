@@ -4,7 +4,7 @@ This is a simple script to update and install the Aptos CLI to a specific versio
 
 ## Usage
 
-### Prerequisite - Maybe install dependencies 
+### Prerequisite - install dependencies if required 
 
 If you run into issues related to dependencies or you get a false positive install successful message please refer - <https://aptos.dev/en/network/nodes/building-from-source#set-up-build-dependencies> for a list of dependencies that aptos requires.
 
